@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyML.NetApp", "MyML.NetApp\MyML.NetApp.csproj", "{962A697E-1083-4ADC-82D6-9AA9C902FE02}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyML.NetAppML.Model", "MyML.NetAppML.Model\MyML.NetAppML.Model.csproj", "{6CBE8E91-3B2F-4F9B-B7AF-41A2E77C9F38}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyML.NetAppML.ConsoleApp", "MyML.NetAppML.ConsoleApp\MyML.NetAppML.ConsoleApp.csproj", "{BEFA4892-4868-44DA-BF86-62670907C971}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{962A697E-1083-4ADC-82D6-9AA9C902FE02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{962A697E-1083-4ADC-82D6-9AA9C902FE02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{962A697E-1083-4ADC-82D6-9AA9C902FE02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CBE8E91-3B2F-4F9B-B7AF-41A2E77C9F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CBE8E91-3B2F-4F9B-B7AF-41A2E77C9F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CBE8E91-3B2F-4F9B-B7AF-41A2E77C9F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CBE8E91-3B2F-4F9B-B7AF-41A2E77C9F38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEFA4892-4868-44DA-BF86-62670907C971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEFA4892-4868-44DA-BF86-62670907C971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEFA4892-4868-44DA-BF86-62670907C971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEFA4892-4868-44DA-BF86-62670907C971}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
