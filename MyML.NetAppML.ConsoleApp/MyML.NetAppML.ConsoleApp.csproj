@@ -4,9 +4,14 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="1.5.0" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyML.NetAppML.Model\MyML.NetAppML.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectCapability Include="ModelBuilderGenerated" />
+  </ItemGroup>
 </Project>
