@@ -2,6 +2,7 @@
 
 using System;
 using MyML_NetAppML.Model;
+using MyML_NetAppML.ConsoleApp.Properties;
 
 namespace MyML_NetAppML.ConsoleApp
 {
