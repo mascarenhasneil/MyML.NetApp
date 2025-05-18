@@ -10,25 +10,6 @@ using MyML_NetAppML.Model;
 
 namespace MyML_NetAppML.ConsoleApp
 {
-    internal static class Resources
-    {
-        public const string TrainingModel = "=============== Training  model ===============";
-        public const string EndOfTraining = "=============== End of training process ===============";
-        public const string CrossValidating = "=============== Cross-validating to get model's accuracy metrics ===============";
-        public const string SavingModel = "=============== Saving the model  ===============";
-        public const string ModelSaved = "The model is saved to {0}";
-        public const string MetricsHeader = "************************************************************";
-        public const string MetricsTitle = "*    Metrics for multi-class classification model   ";
-        public const string MetricsSeparator = "*-----------------------------------------------------------";
-        public const string MetricsFooter = "************************************************************";
-        public const string FoldsHeader = "*************************************************************************************************************";
-        public const string FoldsTitle = "*       Metrics for Multi-class Classification model      ";
-        public const string FoldsSeparator = "*------------------------------------------------------------------------------------------------------------";
-        public const string FoldsFooter = "*************************************************************************************************************";
-        public const string UsingModelToMakeSinglePrediction = "Using model to make single prediction -- Comparing actual Sentiment with predicted Sentiment from sample data...";
-        public const string EndOfProcessMessage = "=============== End of process, hit any key to finish ===============";
-    }
-
     public static class ModelBuilder
     {
         private static string s_train_data_file_path = @"C:\Users\MascarenhasNeil\Source\Repos\MyML.NetApp\MyML.NetApp\Data\wikipedia-detox-250-line-data.tsv";
@@ -84,11 +65,11 @@ namespace MyML_NetAppML.ConsoleApp
             ArgumentNullException.ThrowIfNull(mlContext);
             ArgumentNullException.ThrowIfNull(trainingDataView);
             ArgumentNullException.ThrowIfNull(trainingPipeline);
-            Console.WriteLine(Resources.TrainingModel);
+            Console.WriteLine(Properties.Resources.TrainingModel);
 
             ITransformer model = trainingPipeline.Fit(trainingDataView);
 
-            Console.WriteLine(Resources.EndOfTraining);
+            Console.WriteLine(Properties.Resources.EndOfTraining);
             return model;
         }
 
@@ -99,7 +80,7 @@ namespace MyML_NetAppML.ConsoleApp
             ArgumentNullException.ThrowIfNull(trainingPipeline);
             // Cross-Validate with single dataset (since we don't have two datasets, one for training and for evaluate)
             // in order to evaluate and get the model's accuracy metrics
-            Console.WriteLine(Resources.CrossValidating);
+            Console.WriteLine(Properties.Resources.CrossValidating);
             var crossValidationResults = mlContext.MulticlassClassification.CrossValidate(trainingDataView, trainingPipeline, numberOfFolds: 5, labelColumnName: "Sentiment");
             PrintMulticlassClassificationFoldsAverageMetrics(crossValidationResults);
         }
@@ -111,9 +92,9 @@ namespace MyML_NetAppML.ConsoleApp
             ArgumentNullException.ThrowIfNull(modelRelativePath);
             ArgumentNullException.ThrowIfNull(modelInputSchema);
             // Save/persist the trained model to a .ZIP file
-            Console.WriteLine(Resources.SavingModel);
+            Console.WriteLine(Properties.Resources.SavingModel);
             mlContext.Model.Save(mlModel, modelInputSchema, GetAbsolutePath(modelRelativePath));
-            Console.WriteLine(string.Format(Resources.ModelSaved, GetAbsolutePath(modelRelativePath)));
+            Console.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Properties.Resources.ModelSaved, GetAbsolutePath(modelRelativePath)));
         }
 
         public static string GetAbsolutePath(string relativePath)
@@ -129,9 +110,9 @@ namespace MyML_NetAppML.ConsoleApp
         public static void PrintMulticlassClassificationMetrics(MulticlassClassificationMetrics metrics)
         {
             ArgumentNullException.ThrowIfNull(metrics);
-            Console.WriteLine(Resources.MetricsHeader);
-            Console.WriteLine(Resources.MetricsTitle);
-            Console.WriteLine(Resources.MetricsSeparator);
+            Console.WriteLine(Properties.Resources.MetricsHeader);
+            Console.WriteLine(Properties.Resources.MetricsTitle);
+            Console.WriteLine(Properties.Resources.MetricsSeparator);
             Console.WriteLine($"    MacroAccuracy = {metrics.MacroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better");
             Console.WriteLine($"    MicroAccuracy = {metrics.MicroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better");
             Console.WriteLine($"    LogLoss = {metrics.LogLoss:0.####}, the closer to 0, the better");
@@ -139,7 +120,7 @@ namespace MyML_NetAppML.ConsoleApp
             {
                 Console.WriteLine($"    LogLoss for class {i + 1} = {metrics.PerClassLogLoss[i]:0.####}, the closer to 0, the better");
             }
-            Console.WriteLine(Resources.MetricsFooter);
+            Console.WriteLine(Properties.Resources.MetricsFooter);
         }
 
         public static void PrintMulticlassClassificationFoldsAverageMetrics(IEnumerable<TrainCatalogBase.CrossValidationResult<MulticlassClassificationMetrics>> crossValResults)
@@ -169,14 +150,14 @@ namespace MyML_NetAppML.ConsoleApp
             var logLossReductionStdDeviation = CalculateStandardDeviation(logLossReductionValues);
             var logLossReductionConfidenceInterval95 = CalculateConfidenceInterval95(logLossReductionValues);
 
-            Console.WriteLine(Resources.FoldsHeader);
-            Console.WriteLine(Resources.FoldsTitle);
-            Console.WriteLine(Resources.FoldsSeparator);
+            Console.WriteLine(Properties.Resources.FoldsHeader);
+            Console.WriteLine(Properties.Resources.FoldsTitle);
+            Console.WriteLine(Properties.Resources.FoldsSeparator);
             Console.WriteLine($"*       Average MicroAccuracy:    {microAccuracyAverage:0.###}  - Standard deviation: ({microAccuraciesStdDeviation:#.###})  - Confidence Interval 95%: ({microAccuraciesConfidenceInterval95:#.###})");
             Console.WriteLine($"*       Average MacroAccuracy:    {macroAccuracyAverage:0.###}  - Standard deviation: ({macroAccuraciesStdDeviation:#.###})  - Confidence Interval 95%: ({macroAccuraciesConfidenceInterval95:#.###})");
             Console.WriteLine($"*       Average LogLoss:          {logLossAverage:#.###}  - Standard deviation: ({logLossStdDeviation:#.###})  - Confidence Interval 95%: ({logLossConfidenceInterval95:#.###})");
             Console.WriteLine($"*       Average LogLossReduction: {logLossReductionAverage:#.###}  - Standard deviation: ({logLossReductionStdDeviation:#.###})  - Confidence Interval 95%: ({logLossReductionConfidenceInterval95:#.###})");
-            Console.WriteLine(Resources.FoldsFooter);
+            Console.WriteLine(Properties.Resources.FoldsFooter);
 
         }
 
