@@ -9,9 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyML.NetAppML.Model\MyML.NetAppML.Model.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MyML.NetAppML.Tests\MyML.NetAppML.Tests.csproj" />
+    <ProjectReference Include="..\MyML.NetAppML.Lib\MyML.NetAppML.Lib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
