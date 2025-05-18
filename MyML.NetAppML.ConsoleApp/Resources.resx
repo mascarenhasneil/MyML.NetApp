@@ -18,4 +18,43 @@
   <data name="EndOfProcessMessage" xml:space="preserve">
     <value>=============== End of process, hit any key to finish ===============</value>
   </data>
+  <data name="TrainingModel" xml:space="preserve">
+    <value>=============== Training  model ===============</value>
+  </data>
+  <data name="EndOfTraining" xml:space="preserve">
+    <value>=============== End of training process ===============</value>
+  </data>
+  <data name="CrossValidating" xml:space="preserve">
+    <value>=============== Cross-validating to get model's accuracy metrics ===============</value>
+  </data>
+  <data name="SavingModel" xml:space="preserve">
+    <value>=============== Saving the model  ===============</value>
+  </data>
+  <data name="ModelSaved" xml:space="preserve">
+    <value>The model is saved to {0}</value>
+  </data>
+  <data name="MetricsHeader" xml:space="preserve">
+    <value>************************************************************</value>
+  </data>
+  <data name="MetricsTitle" xml:space="preserve">
+    <value>*    Metrics for multi-class classification model   </value>
+  </data>
+  <data name="MetricsSeparator" xml:space="preserve">
+    <value>*-----------------------------------------------------------</value>
+  </data>
+  <data name="MetricsFooter" xml:space="preserve">
+    <value>************************************************************</value>
+  </data>
+  <data name="FoldsHeader" xml:space="preserve">
+    <value>*************************************************************************************************************</value>
+  </data>
+  <data name="FoldsTitle" xml:space="preserve">
+    <value>*       Metrics for Multi-class Classification model      </value>
+  </data>
+  <data name="FoldsSeparator" xml:space="preserve">
+    <value>*------------------------------------------------------------------------------------------------------------</value>
+  </data>
+  <data name="FoldsFooter" xml:space="preserve">
+    <value>*************************************************************************************************************</value>
+  </data>
 </root>
