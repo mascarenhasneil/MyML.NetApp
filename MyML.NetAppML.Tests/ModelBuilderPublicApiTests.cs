@@ -92,5 +92,31 @@ namespace MyML_NetAppML.Tests
             // Skipped: No public constructor for CrossValidationResult<T>.
             Assert.True(true);
         }
+
+        [Fact]
+        public void Predict_ThrowsFileNotFoundException_WhenModelFileMissing()
+        {
+            // Arrange: Temporarily rename the model file if it exists
+            var modelPath = Path.Combine(Environment.CurrentDirectory, "..", "MyML.NetAppML.Model", "MLModel.zip");
+            var backupPath = modelPath + ".bak";
+            bool modelExisted = false;
+            if (File.Exists(modelPath))
+            {
+                File.Move(modelPath, backupPath);
+                modelExisted = true;
+            }
+
+            try
+            {
+                var input = new MyML_NetAppML.Model.ModelInput { SentimentText = "test", Sentiment = "Positive", LoggedIn = true };
+                Assert.Throws<FileNotFoundException>(() => ModelBuilder.Predict(input));
+            }
+            finally
+            {
+                // Restore the model file if it was renamed
+                if (modelExisted && File.Exists(backupPath))
+                    File.Move(backupPath, modelPath);
+            }
+        }
     }
 }

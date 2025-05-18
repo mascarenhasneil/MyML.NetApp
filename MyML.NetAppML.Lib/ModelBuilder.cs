@@ -37,6 +37,9 @@ namespace MyML_NetAppML.Lib
         {
             var mlContext = new MLContext();
 
+            if (!File.Exists(_modelPath))
+                throw new FileNotFoundException("Trained model file not found.", _modelPath);
+
             // Load model
             DataViewSchema modelSchema;
             ITransformer trainedModel = mlContext.Model.Load(_modelPath, out modelSchema);
