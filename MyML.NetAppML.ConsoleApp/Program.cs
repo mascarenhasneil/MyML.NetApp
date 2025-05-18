@@ -2,10 +2,11 @@
 
 using System;
 using MyML_NetAppML.Model;
+using MyML_NetAppML.ConsoleApp.Properties;
 
 namespace MyML_NetAppML.ConsoleApp
 {
-    class Program
+    sealed class Program
     {
         static void Main(string[] args)
         {
@@ -18,10 +19,10 @@ namespace MyML_NetAppML.ConsoleApp
             // Make a single prediction on the sample data and print results
             var predictionResult = ConsumeModel.Predict(sampleData);
 
-            Console.WriteLine("Using model to make single prediction -- Comparing actual Sentiment with predicted Sentiment from sample data...\n\n");
+            Console.WriteLine(Resources.UsingModelToMakeSinglePrediction);
             Console.WriteLine($"SentimentText: {sampleData.SentimentText}");
             Console.WriteLine($"\n\nPredicted Sentiment value {predictionResult.Prediction} \nPredicted Sentiment scores: [{String.Join(",", predictionResult.Score)}]\n\n");
-            Console.WriteLine("=============== End of process, hit any key to finish ===============");
+            Console.WriteLine(Resources.EndOfProcessMessage);
             Console.ReadKey();
         }
     }

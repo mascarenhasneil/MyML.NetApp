@@ -3,8 +3,10 @@ using System;
 
 namespace MyML.NetApp
 {
-    class Program
+    sealed class Program
     {
+        private Program() { } // Private constructor to prevent instantiation
+
         static void Main(string[] args)
         {
             // Adding input data

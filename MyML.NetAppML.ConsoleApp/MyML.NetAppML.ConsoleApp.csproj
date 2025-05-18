@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ML" Version="1.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyML.NetAppML.Model\MyML.NetAppML.Model.csproj" />
+    <ProjectReference Include="..\MyML.NetAppML.Lib\MyML.NetAppML.Lib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
