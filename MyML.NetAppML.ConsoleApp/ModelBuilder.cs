@@ -94,7 +94,9 @@ namespace MyML_NetAppML.ConsoleApp
             // Save/persist the trained model to a .ZIP file
             Console.WriteLine(Properties.Resources.SavingModel);
             mlContext.Model.Save(mlModel, modelInputSchema, GetAbsolutePath(modelRelativePath));
-            Console.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Properties.Resources.ModelSaved, GetAbsolutePath(modelRelativePath)));
+            // Cache CompositeFormat for repeated use
+            var format = System.Text.CompositeFormat.Parse(Properties.Resources.ModelSaved);
+            Console.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, format, GetAbsolutePath(modelRelativePath)));
         }
 
         public static string GetAbsolutePath(string relativePath)
