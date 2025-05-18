@@ -10,6 +10,25 @@ using MyML_NetAppML.Model;
 
 namespace MyML_NetAppML.ConsoleApp
 {
+    internal static class Resources
+    {
+        public const string TrainingModel = "=============== Training  model ===============";
+        public const string EndOfTraining = "=============== End of training process ===============";
+        public const string CrossValidating = "=============== Cross-validating to get model's accuracy metrics ===============";
+        public const string SavingModel = "=============== Saving the model  ===============";
+        public const string ModelSaved = "The model is saved to {0}";
+        public const string MetricsHeader = "************************************************************";
+        public const string MetricsTitle = "*    Metrics for multi-class classification model   ";
+        public const string MetricsSeparator = "*-----------------------------------------------------------";
+        public const string MetricsFooter = "************************************************************";
+        public const string FoldsHeader = "*************************************************************************************************************";
+        public const string FoldsTitle = "*       Metrics for Multi-class Classification model      ";
+        public const string FoldsSeparator = "*------------------------------------------------------------------------------------------------------------";
+        public const string FoldsFooter = "*************************************************************************************************************";
+        public const string UsingModelToMakeSinglePrediction = "Using model to make single prediction -- Comparing actual Sentiment with predicted Sentiment from sample data...";
+        public const string EndOfProcessMessage = "=============== End of process, hit any key to finish ===============";
+    }
+
     public static class ModelBuilder
     {
         private static string s_train_data_file_path = @"C:\Users\MascarenhasNeil\Source\Repos\MyML.NetApp\MyML.NetApp\Data\wikipedia-detox-250-line-data.tsv";
@@ -44,7 +63,7 @@ namespace MyML_NetAppML.ConsoleApp
 
         public static IEstimator<ITransformer> BuildTrainingPipeline(MLContext mlContext)
         {
-            if (mlContext == null) throw new ArgumentNullException(nameof(mlContext));
+            ArgumentNullException.ThrowIfNull(mlContext);
             // Data process configuration with pipeline data transformations 
             var dataProcessPipeline = mlContext.Transforms.Conversion.MapValueToKey("Sentiment", "Sentiment")
                                       .Append(mlContext.Transforms.Text.FeaturizeText("SentimentText_tf", "SentimentText"))
@@ -62,41 +81,45 @@ namespace MyML_NetAppML.ConsoleApp
 
         public static ITransformer TrainModel(MLContext mlContext, IDataView trainingDataView, IEstimator<ITransformer> trainingPipeline)
         {
-            if (mlContext == null) throw new ArgumentNullException(nameof(mlContext));
-            if (trainingDataView == null) throw new ArgumentNullException(nameof(trainingDataView));
-            if (trainingPipeline == null) throw new ArgumentNullException(nameof(trainingPipeline));
-            Console.WriteLine("=============== Training  model ===============");
+            ArgumentNullException.ThrowIfNull(mlContext);
+            ArgumentNullException.ThrowIfNull(trainingDataView);
+            ArgumentNullException.ThrowIfNull(trainingPipeline);
+            Console.WriteLine(Resources.TrainingModel);
 
             ITransformer model = trainingPipeline.Fit(trainingDataView);
 
-            Console.WriteLine("=============== End of training process ===============");
+            Console.WriteLine(Resources.EndOfTraining);
             return model;
         }
 
         private static void Evaluate(MLContext mlContext, IDataView trainingDataView, IEstimator<ITransformer> trainingPipeline)
         {
-            if (mlContext == null) throw new ArgumentNullException(nameof(mlContext));
-            if (trainingDataView == null) throw new ArgumentNullException(nameof(trainingDataView));
-            if (trainingPipeline == null) throw new ArgumentNullException(nameof(trainingPipeline));
+            ArgumentNullException.ThrowIfNull(mlContext);
+            ArgumentNullException.ThrowIfNull(trainingDataView);
+            ArgumentNullException.ThrowIfNull(trainingPipeline);
             // Cross-Validate with single dataset (since we don't have two datasets, one for training and for evaluate)
             // in order to evaluate and get the model's accuracy metrics
-            Console.WriteLine("=============== Cross-validating to get model's accuracy metrics ===============");
+            Console.WriteLine(Resources.CrossValidating);
             var crossValidationResults = mlContext.MulticlassClassification.CrossValidate(trainingDataView, trainingPipeline, numberOfFolds: 5, labelColumnName: "Sentiment");
             PrintMulticlassClassificationFoldsAverageMetrics(crossValidationResults);
         }
 
         private static void SaveModel(MLContext mlContext, ITransformer mlModel, string modelRelativePath, DataViewSchema modelInputSchema)
         {
+            ArgumentNullException.ThrowIfNull(mlContext);
+            ArgumentNullException.ThrowIfNull(mlModel);
+            ArgumentNullException.ThrowIfNull(modelRelativePath);
+            ArgumentNullException.ThrowIfNull(modelInputSchema);
             // Save/persist the trained model to a .ZIP file
-            Console.WriteLine($"=============== Saving the model  ===============");
+            Console.WriteLine(Resources.SavingModel);
             mlContext.Model.Save(mlModel, modelInputSchema, GetAbsolutePath(modelRelativePath));
-            Console.WriteLine("The model is saved to {0}", GetAbsolutePath(modelRelativePath));
+            Console.WriteLine(string.Format(Resources.ModelSaved, GetAbsolutePath(modelRelativePath)));
         }
 
         public static string GetAbsolutePath(string relativePath)
         {
-            FileInfo _dataRoot = new FileInfo(typeof(Program).Assembly.Location);
-            string assemblyFolderPath = _dataRoot.Directory.FullName;
+            FileInfo dataRoot = new FileInfo(typeof(Program).Assembly.Location);
+            string assemblyFolderPath = dataRoot.Directory.FullName;
 
             string fullPath = Path.Combine(assemblyFolderPath, relativePath);
 
@@ -105,10 +128,10 @@ namespace MyML_NetAppML.ConsoleApp
 
         public static void PrintMulticlassClassificationMetrics(MulticlassClassificationMetrics metrics)
         {
-            if (metrics == null) throw new ArgumentNullException(nameof(metrics));
-            Console.WriteLine($"************************************************************");
-            Console.WriteLine($"*    Metrics for multi-class classification model   ");
-            Console.WriteLine($"*-----------------------------------------------------------");
+            ArgumentNullException.ThrowIfNull(metrics);
+            Console.WriteLine(Resources.MetricsHeader);
+            Console.WriteLine(Resources.MetricsTitle);
+            Console.WriteLine(Resources.MetricsSeparator);
             Console.WriteLine($"    MacroAccuracy = {metrics.MacroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better");
             Console.WriteLine($"    MicroAccuracy = {metrics.MicroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better");
             Console.WriteLine($"    LogLoss = {metrics.LogLoss:0.####}, the closer to 0, the better");
@@ -116,55 +139,62 @@ namespace MyML_NetAppML.ConsoleApp
             {
                 Console.WriteLine($"    LogLoss for class {i + 1} = {metrics.PerClassLogLoss[i]:0.####}, the closer to 0, the better");
             }
-            Console.WriteLine($"************************************************************");
+            Console.WriteLine(Resources.MetricsFooter);
         }
 
         public static void PrintMulticlassClassificationFoldsAverageMetrics(IEnumerable<TrainCatalogBase.CrossValidationResult<MulticlassClassificationMetrics>> crossValResults)
         {
-            var metricsInMultipleFolds = crossValResults.Select(r => r.Metrics);
+            ArgumentNullException.ThrowIfNull(crossValResults);
+            var resultsList = crossValResults.ToList();
 
-            var microAccuracyValues = metricsInMultipleFolds.Select(m => m.MicroAccuracy);
+            var metricsInMultipleFolds = resultsList.Select(r => r.Metrics).ToList();
+
+            var microAccuracyValues = metricsInMultipleFolds.Select(m => m.MicroAccuracy).ToList();
             var microAccuracyAverage = microAccuracyValues.Average();
             var microAccuraciesStdDeviation = CalculateStandardDeviation(microAccuracyValues);
             var microAccuraciesConfidenceInterval95 = CalculateConfidenceInterval95(microAccuracyValues);
 
-            var macroAccuracyValues = metricsInMultipleFolds.Select(m => m.MacroAccuracy);
+            var macroAccuracyValues = metricsInMultipleFolds.Select(m => m.MacroAccuracy).ToList();
             var macroAccuracyAverage = macroAccuracyValues.Average();
             var macroAccuraciesStdDeviation = CalculateStandardDeviation(macroAccuracyValues);
             var macroAccuraciesConfidenceInterval95 = CalculateConfidenceInterval95(macroAccuracyValues);
 
-            var logLossValues = metricsInMultipleFolds.Select(m => m.LogLoss);
+            var logLossValues = metricsInMultipleFolds.Select(m => m.LogLoss).ToList();
             var logLossAverage = logLossValues.Average();
             var logLossStdDeviation = CalculateStandardDeviation(logLossValues);
             var logLossConfidenceInterval95 = CalculateConfidenceInterval95(logLossValues);
 
-            var logLossReductionValues = metricsInMultipleFolds.Select(m => m.LogLossReduction);
+            var logLossReductionValues = metricsInMultipleFolds.Select(m => m.LogLossReduction).ToList();
             var logLossReductionAverage = logLossReductionValues.Average();
             var logLossReductionStdDeviation = CalculateStandardDeviation(logLossReductionValues);
             var logLossReductionConfidenceInterval95 = CalculateConfidenceInterval95(logLossReductionValues);
 
-            Console.WriteLine($"*************************************************************************************************************");
-            Console.WriteLine($"*       Metrics for Multi-class Classification model      ");
-            Console.WriteLine($"*------------------------------------------------------------------------------------------------------------");
+            Console.WriteLine(Resources.FoldsHeader);
+            Console.WriteLine(Resources.FoldsTitle);
+            Console.WriteLine(Resources.FoldsSeparator);
             Console.WriteLine($"*       Average MicroAccuracy:    {microAccuracyAverage:0.###}  - Standard deviation: ({microAccuraciesStdDeviation:#.###})  - Confidence Interval 95%: ({microAccuraciesConfidenceInterval95:#.###})");
             Console.WriteLine($"*       Average MacroAccuracy:    {macroAccuracyAverage:0.###}  - Standard deviation: ({macroAccuraciesStdDeviation:#.###})  - Confidence Interval 95%: ({macroAccuraciesConfidenceInterval95:#.###})");
             Console.WriteLine($"*       Average LogLoss:          {logLossAverage:#.###}  - Standard deviation: ({logLossStdDeviation:#.###})  - Confidence Interval 95%: ({logLossConfidenceInterval95:#.###})");
             Console.WriteLine($"*       Average LogLossReduction: {logLossReductionAverage:#.###}  - Standard deviation: ({logLossReductionStdDeviation:#.###})  - Confidence Interval 95%: ({logLossReductionConfidenceInterval95:#.###})");
-            Console.WriteLine($"*************************************************************************************************************");
+            Console.WriteLine(Resources.FoldsFooter);
 
         }
 
         public static double CalculateStandardDeviation(IEnumerable<double> values)
         {
-            double average = values.Average();
-            double sumOfSquaresOfDifferences = values.Select(val => (val - average) * (val - average)).Sum();
-            double standardDeviation = Math.Sqrt(sumOfSquaresOfDifferences / (values.Count() - 1));
+            ArgumentNullException.ThrowIfNull(values);
+            var valuesList = values.ToList();
+            double average = valuesList.Average();
+            double sumOfSquaresOfDifferences = valuesList.Select(val => (val - average) * (val - average)).Sum();
+            double standardDeviation = Math.Sqrt(sumOfSquaresOfDifferences / (valuesList.Count - 1));
             return standardDeviation;
         }
 
         public static double CalculateConfidenceInterval95(IEnumerable<double> values)
         {
-            double confidenceInterval95 = 1.96 * CalculateStandardDeviation(values) / Math.Sqrt((values.Count() - 1));
+            ArgumentNullException.ThrowIfNull(values);
+            var valuesList = values.ToList();
+            double confidenceInterval95 = 1.96 * CalculateStandardDeviation(valuesList) / Math.Sqrt((valuesList.Count - 1));
             return confidenceInterval95;
         }
     }
