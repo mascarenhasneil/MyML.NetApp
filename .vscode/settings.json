@@ -8,10 +8,19 @@
     ".github/instructions": true,
     ".vscode/instructions": true
   },
-  "github.copilot.chat.codeGeneration.instructions": [],
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "file": ".vscode/instructions/coding-guidelines.instructions.md"
+    }
+  ],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+    {
+      "file": ".vscode/instructions/pull-request-description.instructions.md"
+    }
+  ],
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "file": ".vscode/git-message.instructions.md"
+      "file": ".vscode/instructions/git-message.instructions.md"
     }
   ],
   "github.copilot.chat.reviewSelection.enabled": true,
