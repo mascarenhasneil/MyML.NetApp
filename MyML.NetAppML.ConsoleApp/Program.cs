@@ -5,12 +5,6 @@ using MyML_NetAppML.Model;
 
 namespace MyML_NetAppML.ConsoleApp
 {
-    internal static class Resources
-    {
-        public const string UsingModelToMakeSinglePrediction = "Using model to make single prediction -- Comparing actual Sentiment with predicted Sentiment from sample data...";
-        public const string EndOfProcessMessage = "=============== End of process, hit any key to finish ===============";
-    }
-
     sealed class Program
     {
         static void Main(string[] args)
