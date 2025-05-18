@@ -8,8 +8,8 @@ namespace MyML_NetAppML.Tests
         [Fact]
         public void ModelFile_Exists()
         {
-            var modelPath = Path.Combine("..", "MyML.NetAppML.Model", "MLModel.zip");
-            Assert.True(File.Exists(modelPath));
+            var modelPath = Path.Combine(Directory.GetCurrentDirectory(), "MLModel.zip");
+            Assert.True(File.Exists(modelPath), $"Model file not found at: {modelPath}");
         }
     }
 }
