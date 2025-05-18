@@ -8,7 +8,9 @@ description: "This file contains the instructions for the commit message format.
 
 ### Default
 ```
-<type>(<optional scope>): <description>
+<type>(<optional scope>): 
+
+<description>
 
 <optional body>
 
@@ -44,10 +46,11 @@ Breaking changes should be indicated by an `!` before the `:` in the subject lin
 
 ### Description
 The `description` contains a concise description of the change.
-- Is a **mandatory** part of the format
+- Is a **mandatory** part of the format with a minimum of 100 characters
 - Use the imperative, present tense: "change" not "changed" nor "changes"
   - Think of `This commit will...` or `This commit should...`
 - Don't capitalize the first letter
+- Add bullet points or other formatting
 - No dot (`.`) at the end
 
 ### Body
