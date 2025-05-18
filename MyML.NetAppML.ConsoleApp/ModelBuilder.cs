@@ -12,38 +12,39 @@ namespace MyML_NetAppML.ConsoleApp
 {
     public static class ModelBuilder
     {
-        private static string TRAIN_DATA_FILEPATH = @"C:\Users\MascarenhasNeil\Source\Repos\MyML.NetApp\MyML.NetApp\Data\wikipedia-detox-250-line-data.tsv";
-        private static string MODEL_FILE = ConsumeModel.MLNetModelPath;
+        private static string s_train_data_file_path = @"C:\Users\MascarenhasNeil\Source\Repos\MyML.NetApp\MyML.NetApp\Data\wikipedia-detox-250-line-data.tsv";
+        private static string s_modle_File = ConsumeModel.MLNetModelPath;
 
         // Create MLContext to be shared across the model creation workflow objects 
         // Set a random seed for repeatable/deterministic results across multiple trainings.
-        private static MLContext mlContext = new MLContext(seed: 1);
+        private static MLContext s_mlContext = new MLContext(seed: 1);
 
         public static void CreateModel()
         {
             // Load Data
-            IDataView trainingDataView = mlContext.Data.LoadFromTextFile<ModelInput>(
-                                            path: TRAIN_DATA_FILEPATH,
+            IDataView trainingDataView = s_mlContext.Data.LoadFromTextFile<ModelInput>(
+                                            path: s_train_data_file_path,
                                             hasHeader: true,
                                             separatorChar: '\t',
                                             allowQuoting: true,
                                             allowSparse: false);
 
             // Build training pipeline
-            IEstimator<ITransformer> trainingPipeline = BuildTrainingPipeline(mlContext);
+            IEstimator<ITransformer> trainingPipeline = BuildTrainingPipeline(s_mlContext);
 
             // Train Model
-            ITransformer mlModel = TrainModel(mlContext, trainingDataView, trainingPipeline);
+            ITransformer mlModel = TrainModel(s_mlContext, trainingDataView, trainingPipeline);
 
             // Evaluate quality of Model
-            Evaluate(mlContext, trainingDataView, trainingPipeline);
+            Evaluate(s_mlContext, trainingDataView, trainingPipeline);
 
             // Save model
-            SaveModel(mlContext, mlModel, MODEL_FILE, trainingDataView.Schema);
+            SaveModel(s_mlContext, mlModel, s_modle_File, trainingDataView.Schema);
         }
 
         public static IEstimator<ITransformer> BuildTrainingPipeline(MLContext mlContext)
         {
+            if (mlContext == null) throw new ArgumentNullException(nameof(mlContext));
             // Data process configuration with pipeline data transformations 
             var dataProcessPipeline = mlContext.Transforms.Conversion.MapValueToKey("Sentiment", "Sentiment")
                                       .Append(mlContext.Transforms.Text.FeaturizeText("SentimentText_tf", "SentimentText"))
@@ -61,6 +62,9 @@ namespace MyML_NetAppML.ConsoleApp
 
         public static ITransformer TrainModel(MLContext mlContext, IDataView trainingDataView, IEstimator<ITransformer> trainingPipeline)
         {
+            if (mlContext == null) throw new ArgumentNullException(nameof(mlContext));
+            if (trainingDataView == null) throw new ArgumentNullException(nameof(trainingDataView));
+            if (trainingPipeline == null) throw new ArgumentNullException(nameof(trainingPipeline));
             Console.WriteLine("=============== Training  model ===============");
 
             ITransformer model = trainingPipeline.Fit(trainingDataView);
@@ -71,6 +75,9 @@ namespace MyML_NetAppML.ConsoleApp
 
         private static void Evaluate(MLContext mlContext, IDataView trainingDataView, IEstimator<ITransformer> trainingPipeline)
         {
+            if (mlContext == null) throw new ArgumentNullException(nameof(mlContext));
+            if (trainingDataView == null) throw new ArgumentNullException(nameof(trainingDataView));
+            if (trainingPipeline == null) throw new ArgumentNullException(nameof(trainingPipeline));
             // Cross-Validate with single dataset (since we don't have two datasets, one for training and for evaluate)
             // in order to evaluate and get the model's accuracy metrics
             Console.WriteLine("=============== Cross-validating to get model's accuracy metrics ===============");
@@ -98,6 +105,7 @@ namespace MyML_NetAppML.ConsoleApp
 
         public static void PrintMulticlassClassificationMetrics(MulticlassClassificationMetrics metrics)
         {
+            if (metrics == null) throw new ArgumentNullException(nameof(metrics));
             Console.WriteLine($"************************************************************");
             Console.WriteLine($"*    Metrics for multi-class classification model   ");
             Console.WriteLine($"*-----------------------------------------------------------");
